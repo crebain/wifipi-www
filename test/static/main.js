@@ -8,12 +8,19 @@ define(["jquery", "jqueryui"], function ($) {
         }
 
         function startHandler(e) {
-            handlers[this.id] = window.setInterval($.proxy(go, this), 80);
+            if (!handlers[this.id])
+                handlers[this.id] = window.setInterval($.proxy(go, this), 80);
+
+            $(this).addClass('active');
             e.preventDefault();
         }
 
         function stopHandler(e) {
-            window.clearTimeout(handlers[this.id]);
+            if (handlers[this.id])
+                window.clearTimeout(handlers[this.id]);
+
+            handlers[this.id] = undefined;
+            $(this).removeClass('active');
             e.preventDefault();
         }
 
@@ -29,17 +36,15 @@ define(["jquery", "jqueryui"], function ($) {
         actions[$.ui.keyCode.LEFT] = $('#left');
 
         function keyHandler(e) {
-            console.log("Pressed key " + e.which);
-
             var $element = actions[e.which];
             if (!$element)
                 return;
 
-            $.proxy(e.data, $element[0])();
+            $.proxy(e.data, $element[0])(e);
             }
 
         $('body')
-            .keydown(go, keyHandler)
-            //.keyup(stopHandler, keyHandler);
+            .keydown(startHandler, keyHandler)
+            .keyup(stopHandler, keyHandler);
     });
 });

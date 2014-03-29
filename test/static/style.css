@@ -15,6 +15,17 @@
 
 */
 
+.action img {
+    -moz-transition: all linear 0.1s;
+    -o-transition: all linear 0.1s;
+    -webkit-transition: all linear 0.1s;
+    transition: all linear 0.1s;
+}
+
+.action.active img {
+    background-color: green;
+}
+
 .forward img {
     -moz-transform: rotate(-90deg);
     -ms-transform: rotate(-90deg);
