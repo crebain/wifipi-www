@@ -2,7 +2,7 @@ from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
 from pyramid.response import Response
 from threading import Timer
-import sys
+import sys, os
 
 
 pins = dict(forward = 22, backward = 23, left = 24, right = 25)
@@ -50,6 +50,8 @@ if __name__ == '__main__':
     config = Configurator()
     config.add_route('go', '/go/{direction}')
     config.add_view(go, route_name='go')
+    here = os.path.dirname(os.path.abspath(__file__))
+    config.add_static_view('static', os.path.join(here, 'static'))
     app = config.make_wsgi_app()
     server = make_server('0.0.0.0', 8080, app)
     server.serve_forever()
